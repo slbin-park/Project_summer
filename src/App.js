@@ -16,11 +16,13 @@ function Todolist(){
   const [todo,setTodo] = useState(''); 
   const [todos,setTodos] = useState([]);
   const [idvalue,setidvalue] = useState(1);
+  var [count,setcount] = useState(0);
   const inputchanges = (e) => {
     setTodo(e.target.value);
   }
 
   const addlist =(e)=>{
+    setcount(count+1);
     setidvalue(idvalue+1);
     e.preventDefault();
     if (todo === "") return; // 입력없이 추가 버튼을 클릭하였을 때
@@ -33,6 +35,7 @@ function Todolist(){
 
   const clearbutton = (e) => {
     const newTodos = todos.filter(todo => !todo.complete);
+    setcount(newTodos.length);
     setTodos(newTodos);
   }
 
@@ -49,6 +52,9 @@ return(
       <input  onChange={inputchanges} value={todo} ></input>
       <input type="button" value="추가" onClick={addlist}></input>
       <button onClick={clearbutton}>삭제 버튼</button>
+      <ls><br></br>
+        남은할일 개수 : {count}
+      </ls>
     </div>
   )
 }
