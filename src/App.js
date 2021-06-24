@@ -1,87 +1,82 @@
-// https://ko.reactjs.org/docs/thinking-in-react.html
+// eslint-disalbe
 
-import React, { useState } from 'react';
-//
-const PRODUCTS = [
-  { category: 'Sporting Goods', price: '$49.99', stocked: true, name: 'Football' },
-  { category: 'Sporting Goods', price: '$9.99', stocked: true, name: 'Baseball' },
-  { category: 'Sporting Goods', price: '$29.99', stocked: false, name: 'Basketball' },
-  { category: 'Electronics', price: '$99.99', stocked: true, name: 'iPod Touch' },
-  { category: 'Electronics', price: '$399.99', stocked: false, name: 'iPhone 5' },
-  { category: 'Electronics', price: '$199.99', stocked: true, name: 'Nexus 7' }
-];
+import React,{useState} from'react';
+import './App.css';
 
-export default function App() {
-  return (
-    <div className="container">
-      <FilterableProductTable />
-    </div>
+function App() {
+  return(
+  <div className="App">
+    <Todolist/>
+  </div>
   );
+  
 }
 
-function FilterableProductTable(){
-  const [products,setproducts] = useState(PRODUCTS);
-  return(
-    <div>
-      <Searchbar products={products} setproducts = {setproducts}/>
-      <Productsbar products={products}/>
+function Todolist(){
+  const [todo,setTodo] = useState(''); 
+  const [todos,setTodos] = useState([]);
+  const [idvalue,setidvalue] = useState(1);
+  const inputchanges = (e) => {
+    setTodo(e.target.value);
+  }
+
+  const addlist =(e)=>{
+    setidvalue(idvalue+1);
+    e.preventDefault();
+    if (todo === "") return; // 입력없이 추가 버튼을 클릭하였을 때
+   setTodos(prevTodos => { // todos 에 새로운 원소 추가
+    return [...prevTodos,
+    { id: idvalue, text: todo, complete:false}
+    ]})
+    setTodo(""); // todo 를 클리어 시킴
+  }
+
+  const clearbutton = (e) => {
+    const newTodos = todos.filter(todo => !todo.complete);
+    setTodos(newTodos);
+  }
+
+const toggleTodo = id => {
+  const newTodos = [...todos]
+  const todo = newTodos.find(todo => todo.id === id)
+  todo.complete = !todo.complete
+  setTodos(newTodos)
+}
+return(
+    <div className ="Todolist">
+      <h3>할일</h3>
+      <Todolists todos = {todos} toggleTodo={toggleTodo}/>
+      <input  onChange={inputchanges} value={todo} ></input>
+      <input type="button" value="추가" onClick={addlist}></input>
+      <button onClick={clearbutton}>삭제 버튼</button>
     </div>
   )
 }
 
-const Searchbar = ({ products , setproducts}) => {
-  const clickhandler = () => {setproducts(products.filter(a => a.stocked))};
-  const clickhandler2 = () => {setproducts(PRODUCTS)};
-  return(
-    <form id="form">
-    <input type="text" placeholder="Search..." />
-    <p> <input type="checkbox" onClick={clickhandler} />  {' '}  Only show products in stock  </p>
-    <p> <input type="checkbox" onClick={clickhandler2} />  {' '}  Show All products  </p>
-  </form>
-  );
+function Todolists({todos,toggleTodo}) {
+  return (
+    todos.map(todo => {
+        return <Todo
+            key={todo.id}
+            toggleTodo={toggleTodo}
+            todo={todo} />
+    })
+)
 }
 
-
-const Productsbar = ({products}) =>{
-  const rows = [];
-  let lastCategory = null;
-
-  products.forEach(
-    (product) => {
-    if (product.category !== lastCategory) //카테고리별로 정리하기 위해서 넣음
-      rows.push(<Pushitem category={product.category} key={product.category} />);
-
-    rows.push(<Pushitems product={product} key={product.name} />);
-    lastCategory = product.category;
+function Todo({ todo, toggleTodo }) {
+  const handleTodoClick = () => {
+    console.log(todo.id);
+      toggleTodo(todo.id)
   }
-  );
-
   return (
-    <table border="1px">
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Price</th>
-        </tr>
-      </thead>
-      <tbody>{rows}</tbody>
-    </table>
-  );
+      <div >
+          <li key= {todo.id}>
+              <input type="checkbox"checked={todo.complete}onChange={handleTodoClick} />
+              {todo.text}
+          </li>
+      </div>
+  )
 }
 
-const Pushitem = ({category}) => 
-  <tr>
-  <th colSpan="2">{category}
-  </th>
-</tr>;
-//sda
-
-const Pushitems =({product}) =>{
-  const name = product.stocked ? product.name : <span style={{ color: 'red' }}>{product.name} </span>;
-  return (
-    <tr>
-      <td>{name}</td>
-      <td>{product.price}</td>
-    </tr>
-  );
-}
+export default App;
