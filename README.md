@@ -9,7 +9,7 @@ https://lsh424.tistory.com/37
 https://writingdeveloper.blog/311
 
 # 홈페이지 들어가기
-https://slbin-park.github.io/Project_summer/index.html
+https://slbin-park.github.io/Project_summer
 
 ---
 # Product Name
