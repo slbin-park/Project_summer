@@ -16,7 +16,7 @@ https://slbin-park.github.io/Project_summer/index.html
 > Short blurb about what your product does.
 
 [![NPM Version][npm-image]][npm-url]
-[![NODE Version][node-image]][node-url]
+<!-- [![NODE Version][node-image]][node-url] -->
 [![Downloads Stats][npm-downloads]][npm-url]
 
 One to two paragraph statement about your product and what it does.
