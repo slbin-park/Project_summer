@@ -80,3 +80,18 @@ Distributed under the XYZ license. See ``LICENSE`` for more information.
 [travis-image]: https://img.shields.io/travis/dbader/node-datadog-metrics/master.svg?style=flat-square
 [travis-url]: https://travis-ci.org/dbader/node-datadog-metrics
 [wiki]: https://github.com/yourname/yourproject/wiki
+
+
+5월 31일
+
+6월 14일 발표 2개 
+    16일 시험1개 + 면담1개
+    18일 시험2개
+    21일 시험 2개
+8번 시험?
+이론수업 1개 수업을 이해x 그래서 수업 다 들었어 3일정도?
+10시간? 데베 과제 5일을
+8일썻제
+발표 4~5일 2개
+12일 면담준비 금토일 3일걸렸어 월 화 , 면담준비만 5일걸렸어
+데베 2일동안 과제하면서 배웠던거
