@@ -11,23 +11,54 @@ function Main({history}) {
   const [login,setLogin] = useState({id: "",pwd: ""});
   const [job,setJob] = useState({value : "스태프"});
 
+  const [check,setCheck] = useState({
+    id : '',
+    pwd : '',
+    job : ''
+  });
+
+  useEffect(()=>{
+    Axios.get('http://localhost:8000/api/get').then((response)=>{
+        setCheck(response.data);
+    })
+  },[])
+  //데이터 불러오기
   
   const loginHandler = e =>{
     e.preventDefault();
-    console.log(login);
-    console.log(job);
+    console.log(check);
+    const newcheck = [...check];
+    const id = newcheck.find(id => id.id == login.id);
+    if(id!=null){
+        alert('중복된 아이디 입니다...');
+    }
+    else{
+      Axios.post('http://localhost:8000/api/insert', {
+        title: login.id,
+        content: login.pwd,
+        job : job.value
+      }).then(()=>{
+        alert('회원가입 성공!!');
+        history.push('/sign');
+      })
 
-    Axios.post('http://localhost:8000/api/insert', {
-      title: login.id,
-      content: login.pwd,
-      job : job.value
-    }).then(()=>{
-      alert('등록 완료!');
-      history.push('/sign');
-    })
-    
+    }
+
+
   }
+  //회원가입 성공
+  
 
+  const logincheck = () => {
+    const newcheck = [...check];
+    const id = newcheck.find(id => id.id = login.id);
+    if(id.id == login.id){
+        alert('중복된 아이디 입니다.');
+    }
+    else{
+        alert('로그인 실패..');
+    }
+  }
 
 
   const handleChange = (event) =>{
@@ -45,7 +76,7 @@ function Main({history}) {
       <input type="password" onChange ={e => setLogin({...login, pwd : e.target.value})} value ={login.pwd} id="inputPassword" className="form-control" placeholder="Password" required/>
       
     <div className="form-group">
-        <label htmlFor="exampleSelect1" className="form-label mt-4">Example select</label>
+        <label htmlFor="exampleSelect1" className="form-label mt-4">직업 선택</label>
         <select value={job.value} onChange={handleChange} name ="lifeArr" className="form-select" id="exampleSelect1">
           <option value="스태프">스태프</option>
           <option value="경찰">경찰</option>
@@ -54,7 +85,6 @@ function Main({history}) {
     </div>
 
       &nbsp;<br/>
-      <button onClick={() => history.push('/main')} className="btn btn-primary" >   회원가입   </button>
       <button onClick={loginHandler} className="btn btn-primary" >   회원가입   </button>
 
 

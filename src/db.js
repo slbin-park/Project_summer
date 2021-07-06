@@ -20,10 +20,9 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.get("/api/get", (req, res)=>{
     const id = req.body.title;
     const pwd = req.body.content;
-    const sqlQuery = "SELECT * FROM login where id="+id;
+    const sqlQuery = "SELECT * FROM login;";
     db.query(sqlQuery, (err, result)=>{
-        console.log(result);
-        res.send(result);
+        res.send(result );
     })
  })
 
