@@ -1,7 +1,25 @@
+직업
+
+시민 - > 출퇴근 누르면 
+시민은 할수없습니다.
+
+회원가입 관리 기능 다 만들고나서
+아이디 닉네임
+work 0이면 출근상태 1이면 퇴근 end는 퇴근시간 
+worktime - > 퇴근시간 - 출근시간해서 일한시간
+개인마다 worktime 다 찾아서 더해서 총 일한시간 표시
+관리자페이지에서 직업별(닉네임)으로 정리해서 일한시간을 총합시간으로 
+
+
+
+
 https://m.blog.naver.com/sejun3278/221569640649
 참고 사이트
 npm run build
 npm run deploy
+
+### 로그인 토큰
+https://velog.io/@denmark-choco/GoogleLogin-%ED%9B%84-%EB%A1%9C%EA%B7%B8%EC%9D%B8-%EC%9C%A0%EC%A7%80%ED%95%98%EA%B8%B0
 
 
 # Product Name
