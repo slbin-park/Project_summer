@@ -18,10 +18,13 @@ function MenuPage({location,history }) {
     const [login,setLogin] = useState({id: "",pwd: ""});
     const [check,setCheck] = useState([]); //전체 데이터베이스 불러온것
     const [work,setWork] = useState([]);
+    const [worktime,setWorktime] = useState([]);
+    const [totalworktime,settotalWorktime] = useState();
+    const [value,setValue] = useState(0);
     //시간불러옴
 
-    const [seconds, setSeconds] = useState(Date.now());
-    const [value,setvalue] = useState(1);
+    const [status,setStatus] = useState("퇴근");
+    const [seconds, setSeconds] = useState(Date.now()); //시간 확인할려고 만들었음
 
     // useInterval
     UseInterval(() => {
@@ -36,64 +39,187 @@ function MenuPage({location,history }) {
   useEffect(()=>{
     Axios.get('http://localhost:8000/api/get').then((response)=>{
         setCheck(response.data);
+        //gettime();//시간 불러오기
+        //getworktime();
     });
-    gettime();
-  },[value],[work])
+  },[seconds],[totalworktime])
 
-    const gettime = async function(){
+  useEffect(()=>{
+        getworktime();
+        
+        Axios.post('http://localhost:8000/api/gettime', {
+            title: id.id.id.id,
+            date: seconds
+        }).then((response)=>{
+            if(response.data ==id.id.id.id) //퇴근 안했음
+            {
+                setStatus("출근");
+                console.log("status값",status);
+            }
+            else{
+                setStatus("퇴근");
+            }
+        });
+  },[]);
+
+
+
+
+
+  //출근버튼 누르면 실행하는 함수
+  const starttime = () => {
+    gettime();//출근버튼 
+  }
+
+  const gettime = async function(){
     await Axios.post('http://localhost:8000/api/gettime', {
         title: id.id.id.id,
         date: seconds
     }).then((response)=>{
-        if(response.data ==id.id.id.id)
+        if(response.data ==id.id.id.id) //퇴근 안했음
         {
-            console.log(response.data);
-            setvalue(0);
-           // alert("출근중입니다");
+            alert("이미 출근하셨습니다.");
+            setStatus("출근");
         }
         else{
-        console.log(response.data);
-        setWork(response.data);
-        setvalue(1);
+            starttime2(); //출근 안했으니 insert구문으로 db에 데이터 넣어줌
+            setStatus("출근");
         }
     });
   }
 
-  const starttime = () => {
-    gettime();
-    starttime2();
-  }
-  
+  useEffect(()=>{
+    console.log("status 값",status);
+  },[status])
+
+
   const starttime2 =async function(){
-    if(value == 1)
-    {
-    console.log(work.length);
+    try{
     await Axios.post('http://localhost:8000/api/insert2', {
       title: id.id.id.id,
       date: seconds,
       nickname : id.id.id.nickname
-    }).then(()=>{
-      alert('인서트 성공');
+    }).then((response)=>{
+      console.log("받은값",response);
+      alert('출근 성공');
     })
+}catch(e){
+    console.log("출근에러 : ",e);
+}
   }
-  else{
-      alert("이미 출근중입니다.");
-  }
-  }
+
+//출근 완료
+
+
+//   const getwork = async function(){
+//     await Axios.post('http://localhost:8000/api/getwork', {
+//         title: id.id.id.id,
+//         date: seconds,
+//       }).then((response)=>{
+//         console.log(response.data);
+//         setWork(response.data);
+//       })
+//   }
+  
+
+
+
+
+
+
+
+//총합시간계산
+  const getworktime = async function(){
+    await Axios.post('http://localhost:8000/api/getworktime', {
+        title: id.id.id.id,
+      }).then((response)=>{
+          settotalWorktime(response.data[0].sumprice);
+          console.log(response.data[0].sumprice);
+      })
+}
+
 
 //퇴근
   const endtime = () => {
-    endtime2();
+    try{
+        getwork();
+    }catch(e){
+        console.log(e);
+    }
+
+
 };
-     const endtime2 = async function(){
+
+//work에 시작시간 테이블 가져오기
+const getwork = async function(){
+    const response = await Axios.post('http://localhost:8000/api/getwork', {
+        title: id.id.id.id
+      });
+      if(response.data ==id.id.id.id) //퇴근 안했음
+      {
+          alert("출근하지 않으셨습니다.");
+      }
+      else{
+        var time = response.data[0].start;
+        setValue(1);
+        UpdateWork(time);
+        //checktime();
+      }
+
+  }
+  const UpdateWork= (time)=>{
+    setWork((state,props)=>{
+        return {work : time}
+    });
+  }
+  //work값이 변경됬을때 실행
+  useEffect(()=>{
+    console.log("바뀐뒤 work값 : ",work);
+    checktime();//work값이 변경되었을때 실행함
+  },[work])
+
+  //worktime 값이 변했을때
+  useEffect(()=>{
+      if(value==1){
+    endtime2();
+      }
+  },[worktime])
+
+  //시간계산
+  const checktime = () =>{
+    try{
+  var time1 = moment(work.work,'MMMM Do YYYY, h:mm:ss a');
+  var time2 = moment(seconds); 
+  console.log(time1.format('MMMM Do YYYY, h:mm:ss a'));
+  console.log(time2.format('MMMM Do YYYY, h:mm:ss a'));
+  var duration = moment.duration(time2.diff(time1)).asMinutes();
+  console.log(duration);
+  setWorktime(duration);
+  //var time3 = moment.duration(time1.diff(time2)).asMinutes();
+  console.log(time2);
+    //seconds -> 현재시간
+    }catch(e){
+        console.log(e);
+    }
+
+}
+
+    const endtime2 = async function(){
         await Axios.post('http://localhost:8000/api/update', {
             title: id.id.id.id,
-            date: moment(seconds).format('MMMM Do YYYY, h:mm:ss a')
+            date: moment(seconds).format('MMMM Do YYYY, h:mm:ss a'),
+            worktime : worktime
           }).then(()=>{
+            console.log("일한시간",worktime);
+            setValue(0);
+            getworktime();
             alert('퇴근했습니다.');
-            setvalue(1);
+            setStatus("퇴근");
           })
     }
+
+
+
 
 
 
@@ -103,6 +229,12 @@ function MenuPage({location,history }) {
      <h1>{id.id.id.id} 님 환영합니다.</h1>
      <h2>아이디 : {id.id.id.id}</h2>
      <h2>직업 : {id.id.id.job}</h2>
+     <div className="alert alert-dismissible alert-warning">
+  <button type="button" className="btn-close" data-bs-dismiss="alert"></button>
+  <h4 className="alert-heading">알림</h4>
+  <p className="mb-0">{id.id.id.nickname} 님은 현재 <a href="#" className="alert-link">{status}</a> 상태입니다.</p>
+</div>
+
   <button className="btn btn-lg btn-primary" type="button" value="스태프">스태프</button>
   <button className="btn btn-lg btn-primary" type="button" value="경찰">경찰</button>
   <button className="btn btn-lg btn-primary" type="button" value="EMS">EMS</button>
@@ -111,6 +243,11 @@ function MenuPage({location,history }) {
     </Moment>
     <button onClick={starttime} className="btn btn-lg btn-primary" type="button">출근</button>
     <button onClick={endtime} className="btn btn-lg btn-primary" type="button">퇴근</button>
+    <button onClick={getwork} className="btn btn-lg btn-primary" type="button">값 불러오기</button>
+    <button onClick={checktime} className="btn btn-lg btn-primary" type="button">시간계산</button>
+    <button onClick={getworktime} className="btn btn-lg btn-primary" type="button">총합시간계산</button>
+    <h1>총 일한시간 : {parseInt(Number(totalworktime)/60) } 시간 {parseInt(Number(totalworktime))%60 } 분</h1>
+    
     </div>
   );
   

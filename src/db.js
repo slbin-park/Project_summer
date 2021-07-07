@@ -39,11 +39,29 @@ app.post("/api/gettime", (req, res)=>{
         console.log(result.length);
         if(result.length > 0){
         res.send(id);
-        console.log("데이터 안보냄");
+        console.log("퇴근 안함"); 
         }
         else{
-        console.log("데이터 보냄");
+        console.log("퇴근 했음");
         res.send(result);
+        }
+    })
+ })
+
+ //출근 확인하기
+ app.post("/api/getwork", (req, res)=>{
+    const id = req.body.title;
+    console.log(req.body);
+    console.log("위에는 아이디입니다.");
+    const sqlQuery = "SELECT * FROM time where id = (?) and work =0;";
+    db.query(sqlQuery,[id],(err, result)=>{
+        if(result.length > 0){
+            res.send(result);
+            console.log("퇴근에 성공했습니다."); 
+        }
+        else{
+            console.log("출근하지 않았습니다.");
+            res.send(id);
         }
     })
  })
@@ -78,6 +96,7 @@ app.post("/api/insert2", (req, res) => {
         console.log(result.length);
         if(result.length > 0){
         console.log("데이터 안보냄");
+        res.send('send');
         }
         else{
             db.query(sqlQuery, [id, date,nickname], (err, result) => {
@@ -90,18 +109,30 @@ app.post("/api/insert2", (req, res) => {
 ;
 });
 
-//업데이트 하기
+//퇴근 하기
 app.post("/api/update", (req, res) => {
     console.log(req.body);
     const id = req.body.title;
     const date = req.body.date;
+    const worktime = req.body.worktime;
     console.log(date);
     const sqlQuery = "UPDATE time SET work = 1 ,end = (?),worktime= (?)  where id = (?) and work = 0;";
-    db.query(sqlQuery, [date,date,id], (err, result) => {
+    db.query(sqlQuery, [date,worktime,id], (err, result) => {
         console.log("퇴근했습니다.");
         res.send('success!');
     });
 });
+
+ //시간 확인하기
+ app.post("/api/getworktime", (req, res)=>{
+    const id = req.body.title;
+    
+    const sqlQuery = "SELECT SUM(worktime) sumprice FROM time where id = (?) and work =1;";
+    db.query(sqlQuery,[id],(err, result)=>{
+        res.send(result);
+    })
+ })
+
 
 app.listen(PORT, ()=>{
     console.log(`running on port ${PORT}`);
