@@ -5,6 +5,7 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 const { urlencoded } = require('body-parser');
 const PORT = process.env.port || 8000;
+const moment = require('moment');
 
 const db = mysql.createPool({
     host: "localhost",
@@ -17,6 +18,8 @@ app.use(cors());
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
+
+//login 데이터 가져오기
 app.get("/api/get", (req, res)=>{
     const id = req.body.title;
     const pwd = req.body.content;
@@ -26,14 +29,76 @@ app.get("/api/get", (req, res)=>{
     })
  })
 
+//time데이터 가져오기
+app.post("/api/gettime", (req, res)=>{
+    const id = req.body.title;
+    console.log(req.body);
+    console.log("위에는 아이디입니다.");
+    const sqlQuery = "SELECT * FROM time where id = (?) and work =0;";
+    db.query(sqlQuery,[id],(err, result)=>{
+        console.log(result.length);
+        if(result.length > 0){
+        res.send(id);
+        console.log("데이터 안보냄");
+        }
+        else{
+        console.log("데이터 보냄");
+        res.send(result);
+        }
+    })
+ })
 
+
+//회원가입
 app.post("/api/insert", (req, res) => {
     const id = req.body.title;
     const pwd = req.body.content;
     const job = req.body.job;
-    const sqlQuery = "INSERT INTO login (id, pwd,job) VALUES (?,?,?)";
-    db.query(sqlQuery, [id, pwd,job], (err, result) => {
-        console.log("들어갔습니다.");
+    const nickname = req.body.nickname;
+    const sqlQuery = "INSERT INTO login (id, pwd,job,nickname) VALUES (?,?,?,?)";
+    db.query(sqlQuery, [id, pwd,job,nickname], (err, result) => {
+        console.log("회원가입 성공.");
+        res.send('success!');
+    });
+});
+
+
+//시작시간 입력
+app.post("/api/insert2", (req, res) => {
+    console.log(req.body);
+    const id = req.body.title;
+    const nickname = req.body.nickname;
+    const date = moment(req.body.date).format('MMMM Do YYYY, h:mm:ss a');
+    console.log(date);
+
+    const sqlQuery = "INSERT INTO time (id,start,nickname,work,end,worktime) VALUES (?,?,?,0,0,0)";
+
+    const sqlQuery2= "SELECT * FROM time where id = (?) and work =0;";
+    db.query(sqlQuery2,[id],(err, result)=>{
+        console.log(result.length);
+        if(result.length > 0){
+        console.log("데이터 안보냄");
+        }
+        else{
+            db.query(sqlQuery, [id, date,nickname], (err, result) => {
+                console.log("출근했습니다.");
+            })
+        console.log("데이터 보냄");
+        res.send(result);
+        }
+    })
+;
+});
+
+//업데이트 하기
+app.post("/api/update", (req, res) => {
+    console.log(req.body);
+    const id = req.body.title;
+    const date = req.body.date;
+    console.log(date);
+    const sqlQuery = "UPDATE time SET work = 1 ,end = (?),worktime= (?)  where id = (?) and work = 0;";
+    db.query(sqlQuery, [date,date,id], (err, result) => {
+        console.log("퇴근했습니다.");
         res.send('success!');
     });
 });

@@ -29,7 +29,10 @@ function Sign({props, location, history }) {
   const logincheck = () => {
     const newcheck = [...check];
     const id = newcheck.find(id => id.id = login.id);
-    if(id.id == login.id && id.pwd == login.pwd){
+    if(id==null){
+        alert('로그인실패');
+    }
+    else if(id.id == login.id && id.pwd == login.pwd){
         alert('로그인 성공');
         history.push({
             pathname: "/Menupage",
