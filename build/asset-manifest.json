@@ -1,0 +1,25 @@
+{
+  "files": {
+    "main.css": "/Project_summer/static/css/main.6dea0f05.chunk.css",
+    "main.js": "/Project_summer/static/js/main.106bf150.chunk.js",
+    "main.js.map": "/Project_summer/static/js/main.106bf150.chunk.js.map",
+    "runtime-main.js": "/Project_summer/static/js/runtime-main.02517278.js",
+    "runtime-main.js.map": "/Project_summer/static/js/runtime-main.02517278.js.map",
+    "static/css/2.7b1c032f.chunk.css": "/Project_summer/static/css/2.7b1c032f.chunk.css",
+    "static/js/2.6a023d4c.chunk.js": "/Project_summer/static/js/2.6a023d4c.chunk.js",
+    "static/js/2.6a023d4c.chunk.js.map": "/Project_summer/static/js/2.6a023d4c.chunk.js.map",
+    "static/js/3.3190bc3c.chunk.js": "/Project_summer/static/js/3.3190bc3c.chunk.js",
+    "static/js/3.3190bc3c.chunk.js.map": "/Project_summer/static/js/3.3190bc3c.chunk.js.map",
+    "index.html": "/Project_summer/index.html",
+    "static/css/2.7b1c032f.chunk.css.map": "/Project_summer/static/css/2.7b1c032f.chunk.css.map",
+    "static/css/main.6dea0f05.chunk.css.map": "/Project_summer/static/css/main.6dea0f05.chunk.css.map",
+    "static/js/2.6a023d4c.chunk.js.LICENSE.txt": "/Project_summer/static/js/2.6a023d4c.chunk.js.LICENSE.txt"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.02517278.js",
+    "static/css/2.7b1c032f.chunk.css",
+    "static/js/2.6a023d4c.chunk.js",
+    "static/css/main.6dea0f05.chunk.css",
+    "static/js/main.106bf150.chunk.js"
+  ]
+}
