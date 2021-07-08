@@ -26,7 +26,8 @@ app.get("/api/get", (req, res)=>{
     const pwd = req.body.content;
     const sqlQuery = "SELECT * FROM login;";
     db.query(sqlQuery, (err, result)=>{
-        res.send(result );
+        res.send(result);
+        console.log(result);
     })
  })
 

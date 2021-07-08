@@ -7,6 +7,7 @@ import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import MainPage from './Main';
 
+
 function Sign({props, location, history }) { 
   //로그인을 위한 것들
 //   const mongoose = require('mongoose')
@@ -29,8 +30,10 @@ function Sign({props, location, history }) {
   const logincheck = () => {
     const newcheck = [...check];
     const id = newcheck.find(id => id.id = login.id);
+    console.log(id);
     if(id==null){
-        alert('로그인실패');
+        //alert('로그인실패');
+        console.log(check);
     }
     else if(id.id == login.id && id.pwd == login.pwd){
         alert('로그인 성공');
@@ -40,7 +43,10 @@ function Sign({props, location, history }) {
           })
     }
     else{
-        alert('로그인 실패..');
+      console.log(check[0]);
+      console.log(check[1]);
+      //alert(check[0]);
+
     }
   }
 
