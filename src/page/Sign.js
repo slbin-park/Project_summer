@@ -36,7 +36,7 @@ function Sign({props, location, history }) {
         console.log(check);
     }
     else if(id.id == login.id && id.pwd == login.pwd){
-        alert('로그인 성공');
+        alert('로그인 성공');//성공시에만 띄움
         history.push({
             pathname: "/Menupage",
             id : {id :  id} 
