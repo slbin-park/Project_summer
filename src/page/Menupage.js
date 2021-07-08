@@ -95,7 +95,7 @@ function MenuPage({location,history }) {
 
   const starttime2 =async function(){
     try{
-    await Axios.post('http://localhost:8000/api/insert2', {
+    await Axios.post('http://222.119.7.40:8000/api/insert2', {
       title: id.id.id.id,
       date: seconds,
       nickname : id.id.id.nickname
@@ -130,7 +130,7 @@ function MenuPage({location,history }) {
 
 //총합시간계산
   const getworktime = async function(){
-    await Axios.post('http://localhost:8000/api/getworktime', {
+    await Axios.post('http://222.119.7.40:8000/api/getworktime', {
         title: id.id.id.id,
       }).then((response)=>{
           settotalWorktime(response.data[0].sumprice);
