@@ -5,9 +5,6 @@ import 'bootstrap/dist/css/bootstrap.css';
 import Axios from'axios';
 import { useEffect } from 'react';
 
-import { Link } from 'react-router-dom';
-import { useForm } from "react-hook-form";
-
 function Main({history}) {
   const [login,setLogin] = useState({id: "",pwd: "",nickname:""});
   const [job,setJob] = useState({value : "스태프"});

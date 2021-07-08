@@ -4,8 +4,6 @@ import React,{useState} from'react';
 import 'bootstrap/dist/css/bootstrap.css'
 import Axios from'axios';
 import { useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import MainPage from './Main';
 
 
 function Sign({props, location, history }) { 
@@ -32,7 +30,7 @@ function Sign({props, location, history }) {
     const id = newcheck.find(id => id.id = login.id);
     console.log(id);
     if(id==null){
-        //alert('로그인실패');
+        alert('로그인실패');
         console.log(check);
     }
     else if(id.id == login.id && id.pwd == login.pwd){
@@ -45,7 +43,7 @@ function Sign({props, location, history }) {
     else{
       console.log(check[0]);
       console.log(check[1]);
-      //alert(check[0]);
+      alert(check[0]);
 
     }
   }

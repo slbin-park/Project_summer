@@ -1,9 +1,9 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import { HashRouter as Router, Route, Switch } from 'react-router-dom';
 import SignPage from './page/Sign'; 
 import MainPage from './page/Main';
 import Menupage from './page/Menupage';
-import { Link } from 'react-router-dom';
+import { HashRouter as Link } from 'react-router-dom';
 
 
 function App({props, location, history }) { 
