@@ -1,9 +1,10 @@
 const express = require('express');
 const app = express();
 const mysql = require('mysql');
+
 const cors = require('cors');
 const bodyParser = require('body-parser');
-const PORT = process.env.port || 8000;
+const PORT = process.env.PORT || 8080;
 const moment = require('moment');
 
 const db = mysql.createPool({
