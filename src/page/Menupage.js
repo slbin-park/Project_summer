@@ -33,7 +33,7 @@ function MenuPage({location,history }) {
 
     //데이터 가져오기
   useEffect(()=>{
-    Axios.get('http://localhost:8000/api/get').then((response)=>{
+    Axios.get('http://qkrtmfqls.gabia.io/api/get').then((response)=>{
         setCheck(response.data);
         //gettime();//시간 불러오기
         //getworktime();
@@ -43,7 +43,7 @@ function MenuPage({location,history }) {
   useEffect(()=>{
         getworktime();
         
-        Axios.post('http://localhost:8000/api/gettime', {
+        Axios.post('http://qkrtmfqls.gabia.io/api/gettime', {
             title: id.id.id.id,
             date: seconds
         }).then((response)=>{
@@ -68,7 +68,7 @@ function MenuPage({location,history }) {
   }
 
   const gettime = async function(){
-    await Axios.post('http://localhost:8000/api/gettime', {
+    await Axios.post('http://qkrtmfqls.gabia.io/api/gettime', {
         title: id.id.id.id,
         date: seconds
     }).then((response)=>{
@@ -91,7 +91,7 @@ function MenuPage({location,history }) {
 
   const starttime2 =async function(){
     try{
-    await Axios.post('http://222.119.7.40:8000/api/insert2', {
+    await Axios.post('http://qkrtmfqls.gabia.io/api/insert2', {
       title: id.id.id.id,
       date: seconds,
       nickname : id.id.id.nickname
@@ -126,7 +126,7 @@ function MenuPage({location,history }) {
 
 //총합시간계산
   const getworktime = async function(){
-    await Axios.post('http://222.119.7.40:8000/api/getworktime', {
+    await Axios.post('http://qkrtmfqls.gabia.io/api/getworktime', {
         title: id.id.id.id,
       }).then((response)=>{
           settotalWorktime(response.data[0].sumprice);
@@ -148,7 +148,7 @@ function MenuPage({location,history }) {
 
 //work에 시작시간 테이블 가져오기
 const getwork = async function(){
-    const response = await Axios.post('http://localhost:8000/api/getwork', {
+    const response = await Axios.post('http://qkrtmfqls.gabia.io/api/getwork', {
         title: id.id.id.id
       });
       if(response.data ==id.id.id.id) //퇴근 안했음
@@ -201,7 +201,7 @@ const getwork = async function(){
 }
 
     const endtime2 = async function(){
-        await Axios.post('http://localhost:8000/api/update', {
+        await Axios.post('http://qkrtmfqls.gabia.io/api/update', {
             title: id.id.id.id,
             date: moment(seconds).format('MMMM Do YYYY, h:mm:ss a'),
             worktime : worktime

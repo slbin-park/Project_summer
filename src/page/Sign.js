@@ -20,7 +20,7 @@ function Sign({props, location, history }) {
 
 
   useEffect(()=>{
-    Axios.get('http://222.119.7.40:8000/api/get').then((response)=>{
+    Axios.get('http://qkrtmfqls.gabia.io/api/get').then((response)=>{
         setCheck(response.data);
     })
   },[])

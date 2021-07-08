@@ -16,7 +16,7 @@ function Main({history}) {
   });
 
   useEffect(()=>{
-    Axios.get('http://222.119.7.40:8000/api/get').then((response)=>{
+    Axios.get('http://qkrtmfqls.gabia.io/api/get').then((response)=>{
         setCheck(response.data);
     })
   },[])
@@ -44,7 +44,7 @@ function Main({history}) {
           alert('중복된 아이디 입니다...');
       }
       else{
-      Axios.post('http://222.119.7.40:8000/api/insert', {
+      Axios.post('http://qkrtmfqls.gabia.io/api/insert', {
         title: login.id,
         content: login.pwd,
         job : job.value,
