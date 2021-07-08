@@ -3,7 +3,7 @@ import { HashRouter as Router, Route, Switch } from 'react-router-dom';
 import SignPage from './page/Sign'; 
 import MainPage from './page/Main';
 import Menupage from './page/Menupage';
-import { HashRouter as Link } from 'react-router-dom';
+import {Link } from 'react-router-dom';
 
 
 function App({props, location, history }) { 
