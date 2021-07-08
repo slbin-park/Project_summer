@@ -8,11 +8,12 @@ const PORT = process.env.port || 8000;
 const moment = require('moment');
 
 const db = mysql.createPool({
-    host: "localhost",
-    user: "root",
-    password: "awd15963",
-    database: "test2"
+    host: "my8001.gabiadb.com",
+    user: "vipadmin",
+    password: "awdawd15963",
+    database: "vipdb"
 });
+
 
 app.use(cors());
 app.use(express.json());
@@ -57,12 +58,12 @@ app.post("/api/gettime", (req, res)=>{
     db.query(sqlQuery,[id],(err, result)=>{
         if(result.length > 0){
             res.send(result);
-            console.log("퇴근에 성공했습니다."); 
+            console.log("퇴근"); 
         }
-        else{
+            else{
             console.log("출근하지 않았습니다.");
             res.send(id);
-        }
+            }
     })
  })
 
@@ -74,8 +75,13 @@ app.post("/api/insert", (req, res) => {
     const job = req.body.job;
     const nickname = req.body.nickname;
     const sqlQuery = "INSERT INTO login (id, pwd,job,nickname) VALUES (?,?,?,?)";
+    const sqlQuery2 = "SELECT * FROM time;";
+    db.query(sqlQuery2, [id, pwd,job,nickname], (err, result) => {
+        console.log(result);
+    });
     db.query(sqlQuery, [id, pwd,job,nickname], (err, result) => {
         console.log("회원가입 성공.");
+        console.log(result);
         res.send('success!');
     });
 });
@@ -135,5 +141,5 @@ app.post("/api/update", (req, res) => {
 
 
 app.listen(PORT, ()=>{
-    console.log(`running on port ${PORT}`);
+    console.log(`running on port ${PORT} 서버가 정상작동했습니다.`);
 });
