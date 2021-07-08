@@ -3,7 +3,6 @@ const app = express();
 const mysql = require('mysql');
 const cors = require('cors');
 const bodyParser = require('body-parser');
-const { urlencoded } = require('body-parser');
 const PORT = process.env.port || 8000;
 const moment = require('moment');
 

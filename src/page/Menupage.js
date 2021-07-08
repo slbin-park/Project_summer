@@ -4,11 +4,7 @@ import React,{useState,useRef} from'react';
 import 'bootstrap/dist/css/bootstrap.css'
 import Axios from'axios';
 import { useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import MainPage from './Main';
-import {useLocation} from "react-router";
 import 'moment/locale/ko';
-import { useInterval } from 'react';
 import Moment from 'react-moment';
 import moment from 'moment';
 
