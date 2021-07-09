@@ -1,0 +1,14 @@
+{
+    "homepage": "./",
+    "scripts": {
+      "dev": "concurrently \"npm run dev:server\" \"npm run dev:client\"",
+      "dev:server": "npx serve -s build",
+      "dev:client": "node db.js",
+        "start": "npm -run-all --parallel start:**",
+        "start:client": "npx serve -s build",
+        "start:server": "node db.js",
+        "build": "react-scripts build",
+        "test": "react-scripts test",
+        "eject": "react-scripts eject"
+      }
+}

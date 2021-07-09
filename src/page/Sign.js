@@ -20,14 +20,15 @@ function Sign({props, location, history }) {
 
 
   useEffect(()=>{
-    Axios.get('http://qkrtmfqls.gabia.io/api/get').then((response)=>{
+    Axios.get('https://qkrtmfqls.gabia.io/api/get').then((response)=>{
         setCheck(response.data);
+        console.log(response.data);
     })
   },[])
 
   const logincheck = () => {
     const newcheck = [...check];
-    const id = newcheck.find(id => id.id = login.id);
+    const id = newcheck.find(id => id.id == login.id);
     console.log(id);
     if(id==null){
         alert('로그인실패');
@@ -43,7 +44,7 @@ function Sign({props, location, history }) {
     else{
       console.log(check[0]);
       console.log(check[1]);
-      alert(check[0]);
+      //alert(check[0]);
 
     }
   }

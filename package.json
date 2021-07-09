@@ -1,5 +1,5 @@
 {
-  "homepage": "http://slbin-park.github.io/Project_summer",
+  "homepage": "./",
   "name": "project",
   "version": "0.1.1",
   "private": true,
@@ -29,6 +29,9 @@
     "web-vitals": "^1.1.2"
   },
   "scripts": {
+    "dev": "concurrently \"npm run dev:server\" \"npm run dev:client\"",
+    "dev:server": "node db.js",
+    "dev:client": "npx serve -s build",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",

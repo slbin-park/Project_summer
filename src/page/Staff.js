@@ -10,7 +10,7 @@ import moment from 'moment';
 
 function MenuPage({location,history }) { 
     const id = location;
-    //console.log(id.id.id);
+    console.log("location 값",location);
     const [login,setLogin] = useState({id: "",pwd: ""});
     const [check,setCheck] = useState([]); //전체 데이터베이스 불러온것
     const [work,setWork] = useState([]);
@@ -202,7 +202,7 @@ const getwork = async function(){
 }
 
     const endtime2 = async function(){
-        await Axios.post('https://qkrtmfqls.gabia.io/api/update', {
+        await Axios.post('http://qkrtmfqls.gabia.io/api/update', {
             title: id.id.id.id,
             date: moment(seconds).format('MMMM Do YYYY, h:mm:ss a'),
             worktime : worktime
@@ -216,20 +216,6 @@ const getwork = async function(){
     }
 
 
-    const staff = async function(){
-
-      if(id.id.id.job == '스태프'){
-        alert('스태프 페이지 이동');//성공시에만 띄움
-      history.push({
-          pathname: "/staff",
-          id : {id :  id.id.id} 
-        })
-      }
-      else {
-        alert('스태프만 가능합니다.');
-      }
-  }
-
 
 
 
@@ -237,26 +223,20 @@ const getwork = async function(){
 
   return(
  <div className="d-grid gap-2">
-     <h1>{id.id.id.nickname} 님 환영합니다.</h1>
-     <h2>고유번호 : {id.id.id.id}</h2>
-     <h2>직업 : {id.id.id.job}</h2>
-     <div className="alert alert-dismissible alert-warning">
+    <h1>스태프 페이지 입니다.</h1>
+    <h1>{id.id.id.id} 님 환영합니다.</h1>
+    <h2>아이디 : {id.id.id.id}</h2>
+    <h2>직업 : {id.id.id.job}</h2>
+    <div className="alert alert-dismissible alert-warning">
   <button type="button" className="btn-close" data-bs-dismiss="alert"></button>
   <h4 className="alert-heading">알림</h4>
   <p className="mb-0">{id.id.id.nickname} 님은 현재 <a href="#" className="alert-link">{status}</a> 상태입니다.</p>
 </div>
-
-  <button onClick={staff} className="btn btn-lg btn-primary" type="button" value="스태프">스태프</button>
-  <button className="btn btn-lg btn-primary" type="button" value="경찰">경찰</button>
-  <button className="btn btn-lg btn-primary" type="button" value="EMS">EMS</button>
     <Moment format="YYYY년 MM월 DD일 HH시 mm분 ss초" interval = { 0 }>
         {seconds}
     </Moment>
     <button onClick={starttime} className="btn btn-lg btn-primary" type="button">출근</button>
     <button onClick={endtime} className="btn btn-lg btn-primary" type="button">퇴근</button>
-    <button onClick={getwork} className="btn btn-lg btn-primary" type="button">값 불러오기</button>
-    <button onClick={checktime} className="btn btn-lg btn-primary" type="button">시간계산</button>
-    <button onClick={getworktime} className="btn btn-lg btn-primary" type="button">총합시간계산</button>
     <h1>총 일한시간 : {parseInt(Number(totalworktime)/60) } 시간 {parseInt(Number(totalworktime))%60 } 분</h1>
     
     </div>

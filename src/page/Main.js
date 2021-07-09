@@ -16,7 +16,7 @@ function Main({history}) {
   });
 
   useEffect(()=>{
-    Axios.get('http://qkrtmfqls.gabia.io/api/get').then((response)=>{
+    Axios.get('https://qkrtmfqls.gabia.io/api/get').then((response)=>{
         setCheck(response.data);
     })
   },[])
@@ -25,16 +25,6 @@ function Main({history}) {
   const loginHandler = e =>{
     if(login.id =='' || login.pwd =='' || login.nickname==''){
       alert('공백이 있습니다.');
-    }
-    else if(login.id.length <5)
-    {
-      alert('아이디 4자이상하셈');
-    }
-    else if(login.pwd.length <7){
-      alert('비밀번호 6자이상 하셈');
-    }
-    else if(login.nickname.length <3){
-      alert('닉네임 3글자이상 하셈');
     } else{
       e.preventDefault();
       console.log(check);
@@ -44,7 +34,7 @@ function Main({history}) {
           alert('중복된 아이디 입니다...');
       }
       else{
-      Axios.post('http://qkrtmfqls.gabia.io/api/insert', {
+      Axios.post('https://qkrtmfqls.gabia.io/api/insert', {
         title: login.id,
         content: login.pwd,
         job : job.value,
