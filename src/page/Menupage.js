@@ -6,17 +6,59 @@ import Axios from'axios';
 import { useEffect } from 'react';
 import 'moment/locale/ko';
 import Moment from 'react-moment';
-import moment from 'moment';
+import styled from "styled-components";
+import imgA from './img/VIP.png';
+import Police from './img/Police.png';
+import EMS from './img/EMS.png';
+import Staff from './img/Staff.jpg';
+import Logout from './img/logout.png';
+
+
+const Menu = styled.div`
+justify-content: center;
+text-align: center;
+position: fixed;
+display: flex;
+justify-content: space-between;
+bottom: 0;
+width: 560px;
+background-color: #efefef;
+height: 120px;
+left: 50%;
+padding: 15px 30px;
+padding-bottom: 10px;
+transform: translateX(-50%);
+border-top-left-radius: 25px;
+border-top-right-radius: 25px;
+`;
+
+const ButtonStyle = styled.div`
+justify-content: center;
+text-align: center;
+padding: 20px;
+background-color: #fff;
+border-radius: 10px;
+transition: all 0.3s;
+position: relative;
+border: 2px solid #000;
+color: #000;
+&:hover {
+  transform: scale(1.1);
+}
+span {
+  position: absolute;
+  bottom: 5%;
+  left: 35%;
+}
+`;
+
 
 function MenuPage({location,history }) { 
-    const id = location;
-    //console.log(id.id.id);
-    const [login,setLogin] = useState({id: "",pwd: ""});
-    const [check,setCheck] = useState([]); //전체 데이터베이스 불러온것
-    const [work,setWork] = useState([]);
-    const [worktime,setWorktime] = useState([]);
+  
+    const [id,setId] = useState(window.localStorage.getItem("id"))
+    const [nickname,setNickname] = useState()
+    const [job,setJob] = useState()
     const [totalworktime,settotalWorktime] = useState();
-    const [value,setValue] = useState(0);
     //시간불러옴
 
     const [status,setStatus] = useState("퇴근");
@@ -27,202 +69,54 @@ function MenuPage({location,history }) {
       setSeconds(Date.now());
     }, 1000);
     const nowTime = Date.now();
-    // interval 30초
-    //return <Moment interval = { 30000 }>{nowTime}</Moment>;
-    // interval disable
-
-    //데이터 가져오기
-  useEffect(()=>{
-    Axios.get('https://qkrtmfqls.gabia.io/api/get').then((response)=>{
-        setCheck(response.data);
-        //gettime();//시간 불러오기
-        //getworktime();
-    });
-  },[seconds],[totalworktime])
 
   useEffect(async()=>{
+      await Axios.post("https://qkrtmfqls.gabia.io/api/tokencheck", { //토큰 해석해서 출근,퇴근,아이디,닉네임,직업 불러옴
+        token : window.localStorage.getItem("token")
+     })
+     .then((response)=>{
+       setJob(response.data.job);
+       setNickname(response.data.nickname);
+     })
+     .catch((error)=> {
+      history.push({
+        pathname: "/sign",
+      })
+       console.log(error);
+     });
         getworktime();
-        
-        await Axios.post('https://qkrtmfqls.gabia.io/api/gettime', {
-            title: id.id.id.id,
-            date: seconds
-        }).then((response)=>{
-            if(response.data ==id.id.id.id) //퇴근 안했음
-            {
-              console.log("돌아온값 : ",response.data);
-                setStatus("출근");
-            }
-            else{
-                setStatus("퇴근");
-            }
-        });
-  },[]);
+      await Axios.post('https://qkrtmfqls.gabia.io/api/gettime', { //출근,퇴근 표시
+              title: id,
+              date: seconds
+          }).then((response)=>{
+              if(response.data ==id) //퇴근 안했음
+              {
+                //console.log("돌아온값 : ",response.data);
+                  setStatus("출근");
+              }
+              else{
+                  setStatus("퇴근");
+              }
+          });
+    },[]);
 
-
-
-
-
-  //출근버튼 누르면 실행하는 함수
-
-  const starttime = () => {
-    gettime();//출근버튼 
-  }
-
-  const gettime = async function(){
-    await Axios.post('https://qkrtmfqls.gabia.io/api/gettime', {
-        title: id.id.id.id,
-        date: seconds
-    }).then((response)=>{
-        if(response.data ==id.id.id.id) //퇴근 안했음
-        {
-            alert("이미 출근하셨습니다.");
-            setStatus("출근");
-        }
-        else{
-            starttime2(); //출근 안했으니 insert구문으로 db에 데이터 넣어줌
-            setStatus("출근");
-        }
-    });
-  }
-
-  useEffect(()=>{
-    console.log("status 값",status);
-  },[status])
-
-
-  const starttime2 =async function(){
-    try{
-    await Axios.post('https://qkrtmfqls.gabia.io/api/insert2', {
-      title: id.id.id.id,
-      date: seconds,
-      nickname : id.id.id.nickname
-    }).then((response)=>{
-      console.log("받은값",response);
-      alert('출근 성공');
-    })
-}catch(e){
-    console.log("출근에러 : ",e);
-}
-  }
-
-//출근 완료
-
-
-//   const getwork = async function(){
-//     await Axios.post('http://localhost:8000/api/getwork', {
-//         title: id.id.id.id,
-//         date: seconds,
-//       }).then((response)=>{
-//         console.log(response.data);
-//         setWork(response.data);
-//       })
-//   }
-  
-
-
-
-
-
-
-
-//총합시간계산
-  const getworktime = async function(){
+  const getworktime = async function(){ //db에서 일한시간 합쳐서 
     await Axios.post('https://qkrtmfqls.gabia.io/api/getworktime', {
-        title: id.id.id.id,
+        title: id,
       }).then((response)=>{
           settotalWorktime(response.data[0].sumprice);
-          console.log(response.data[0].sumprice);
+          //console.log(response.data[0].sumprice);
       })
 }
 
 
-//퇴근
-  const endtime = () => {
-    try{
-        getwork();
-    }catch(e){
-        console.log(e);
-    }
 
-
-};
-
-//work에 시작시간 테이블 가져오기
-const getwork = async function(){
-    const response = await Axios.post('https://qkrtmfqls.gabia.io/api/getwork', {
-        title: id.id.id.id
-      });
-      if(response.data ==id.id.id.id) //퇴근 안했음
-      {
-          alert("출근하지 않으셨습니다.");
-      }
-      else{
-        var time = response.data[0].start;
-        setValue(1);
-        UpdateWork(time);
-        //checktime();
-      }
-
-  }
-  const UpdateWork= (time)=>{
-    setWork((state,props)=>{
-        return {work : time}
-    });
-  }
-  //work값이 변경됬을때 실행
-  useEffect(()=>{
-    console.log("바뀐뒤 work값 : ",work);
-    checktime();//work값이 변경되었을때 실행함
-  },[work])
-
-  //worktime 값이 변했을때
-  useEffect(()=>{
-      if(value==1){
-    endtime2();
-      }
-  },[worktime])
-
-  //시간계산
-  const checktime = () =>{
-    try{
-  var time1 = moment(work.work,'MMMM Do YYYY, h:mm:ss a');
-  var time2 = moment(seconds); 
-  console.log(time1.format('MMMM Do YYYY, h:mm:ss a'));
-  console.log(time2.format('MMMM Do YYYY, h:mm:ss a'));
-  var duration = moment.duration(time2.diff(time1)).asMinutes();
-  console.log(duration);
-  setWorktime(duration);
-  //var time3 = moment.duration(time1.diff(time2)).asMinutes();
-  console.log(time2);
-    //seconds -> 현재시간
-    }catch(e){
-        console.log(e);
-    }
-
-}
-
-    const endtime2 = async function(){
-        await Axios.post('https://qkrtmfqls.gabia.io/api/update', {
-            title: id.id.id.id,
-            date: moment(seconds).format('MMMM Do YYYY, h:mm:ss a'),
-            worktime : worktime
-          }).then(()=>{
-            console.log("일한시간",worktime);
-            setValue(0);
-            getworktime();
-            alert('퇴근했습니다.');
-            setStatus("퇴근");
-          })
-    }
-
-
-    const staff = async function(){
-
-      if(id.id.id.job == '스태프'){
+    const staff = async function(){ //스태프페이지 이동
+      if(job == '스태프' || job == '관리자'){
+        console.log(history);
         alert('스태프 페이지 이동');//성공시에만 띄움
       history.push({
           pathname: "/staff",
-          id : {id :  id.id.id} 
         })
       }
       else {
@@ -230,44 +124,78 @@ const getwork = async function(){
       }
   }
 
+  const police = async function(){ //경찰페이지 이동
+    if(job == '경찰' || job == '관리자'){
+      alert('경찰 페이지 이동');//성공시에만 띄움
+    history.push({
+        pathname: "/police",
+      })
+    }
+    else {
+      alert('경찰만 가능합니다.');
+    }
+}
+
+const Admin = async function(){ //경찰페이지 이동
+  if(job == '관리자'){
+    alert('관리자 페이지 이동');//성공시에만 띄움
+  history.push({
+      pathname: "/Admin",
+    })
+  }
+  else {
+    alert('관리자만 가능합니다.');
+  }
+}
+
+//로그아웃
+const logout = async function(){
+  alert('로그아웃 하셨습니다.');
+  window.localStorage.clear();
+  history.push({
+    pathname: "/",
+  });
+}
+
+
+const MenuButton = ({page,text})=>{
+    return (
+      <ButtonStyle onClick={page} >
+        <img className="MENUVIP" src={text}></img>
+      </ButtonStyle>
+    );
+}
 
 
 
-
-
+//classname css수정시 . 사용해야함
   return(
  <div className="d-grid gap-2">
-     <h1>{id.id.id.nickname} 님 환영합니다.</h1>
-     <h2>고유번호 : {id.id.id.id}</h2>
-     <h2>직업 : {id.id.id.job}</h2>
-     <div className="alert alert-dismissible alert-warning">
-  <button type="button" className="btn-close" data-bs-dismiss="alert"></button>
-  <h4 className="alert-heading">알림</h4>
-  <p className="mb-0">{id.id.id.nickname} 님은 현재 <a href="#" className="alert-link">{status}</a> 상태입니다.</p>
-</div>
-
-  <button onClick={staff} className="btn btn-lg btn-primary" type="button" value="스태프">스태프</button>
-  <button className="btn btn-lg btn-primary" type="button" value="경찰">경찰</button>
-  <button className="btn btn-lg btn-primary" type="button" value="EMS">EMS</button>
-    <Moment format="YYYY년 MM월 DD일 HH시 mm분 ss초" interval = { 0 }>
+    <div id="gettt" className="alert alert-dismissible alert-warning">
+      <h1 className="alert-heading">알림</h1>
+        <p className="mb-0">{nickname} 님은 현재 <a href="#" className="alert-link">{status}
+          </a> 상태입니다.
+        </p>
+    </div>
+      <h2 className='h2line'>고유번호 : {id}</h2>
+      <h2>직업 : {job}</h2>
+      <Moment className='clock' format="YYYY년 MM월 DD일 HH시 mm분 ss초" interval = { 0 }>
         {seconds}
-    </Moment>
-    <button onClick={starttime} className="btn btn-lg btn-primary" type="button">출근</button>
-    <button onClick={endtime} className="btn btn-lg btn-primary" type="button">퇴근</button>
-    <button onClick={getwork} className="btn btn-lg btn-primary" type="button">값 불러오기</button>
-    <button onClick={checktime} className="btn btn-lg btn-primary" type="button">시간계산</button>
-    <button onClick={getworktime} className="btn btn-lg btn-primary" type="button">총합시간계산</button>
-    <h1>총 일한시간 : {parseInt(Number(totalworktime)/60) } 시간 {parseInt(Number(totalworktime))%60 } 분</h1>
-    
+       </Moment>
+    <Menu>
+      <MenuButton page = {staff} text = {Staff} color = 'black' name ='user'/>
+      <MenuButton text = {EMS} color = '#87BF00' name ='doctor'/>
+      <MenuButton page = {police}  text = {Police} color = '#DE6800' name ='coffee'/>
+      <MenuButton page = {Admin}text = {imgA} color = '#5CD3F3' name ='discord'/>
+      <MenuButton page = {logout} text = {Logout} color = '#5CD3F3' name ='discord'/>
+    </Menu>
     </div>
   );
-  
 }
 
 
 function UseInterval(callback, delay) {
     const savedCallback = useRef();
-
     useEffect(() => {
       // useEffect에 매개변수로 받은 콜백을 현재 Ref로 선언해준다.
       savedCallback.current = callback;

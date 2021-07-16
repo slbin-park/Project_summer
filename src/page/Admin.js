@@ -9,7 +9,7 @@ import Moment from 'react-moment';
 import moment from 'moment';
 import { Button, Segment } from 'semantic-ui-react'
 
-function MenuPage({location,history }) { 
+function Admin({location,history }) { 
   
     const [id,setId] = useState(window.localStorage.getItem("id"))
     const [nickname,setNickname] = useState(window.localStorage.getItem("id"))
@@ -18,9 +18,8 @@ function MenuPage({location,history }) {
     const [worktime,setWorktime] = useState([]);
     const [totalworktime,settotalWorktime] = useState();
     const [value,setValue] = useState(0);
-    const [staff,setStaff] = useState();
     const [register,setRegister] = useState();
-    let stafflet = [];
+    const [userdata,setUser] =useState();
     //시간불러옴
 
     const [status,setStatus] = useState("퇴근");
@@ -42,7 +41,8 @@ function MenuPage({location,history }) {
   
 
   useEffect(async()=>{
-    getstaff();
+    getuser();
+    getregister();
     await Axios.post("https://qkrtmfqls.gabia.io/api/tokencheck", {
       token : window.localStorage.getItem("token")
    })
@@ -77,54 +77,6 @@ function MenuPage({location,history }) {
         });
   },[]);
 
-
-
-
-
-  //출근버튼 누르면 실행하는 함수
-
-  const starttime = () => {
-    gettime();//출근버튼 
-  }
-
-  const gettime = async function(){
-    await Axios.post('https://qkrtmfqls.gabia.io/api/gettime', {
-        title: id,
-        date: seconds,
-        nickname : nickname
-    }).then((response)=>{
-        if(response.data ==id) //퇴근 안했음
-        {
-            alert("이미 출근하셨습니다.");
-            setStatus("출근");
-        }
-        else{
-            starttime2(); //출근 안했으니 insert구문으로 db에 데이터 넣어줌
-            setStatus("출근");
-        }
-    });
-  }
-
-  useEffect(()=>{
-    //console.log("status 값",status);
-  },[status])
-
-
-  const starttime2 =async function(){
-    try{
-    await Axios.post('https://qkrtmfqls.gabia.io/api/insert2', {
-      title: id,
-      date: seconds,
-      nickname : nickname,
-      job : job
-    }).then((response)=>{
-      console.log("받은값",response);
-      alert('출근 성공');
-    })
-}catch(e){
-    console.log("출근에러 : ",e);
-}
-  }
   
 
 
@@ -182,12 +134,6 @@ const getwork = async function(){
     checktime();//work값이 변경되었을때 실행함
   },[work])
 
-  //worktime 값이 변했을때
-  useEffect(()=>{
-      if(value==1){
-    endtime2();
-      }
-  },[worktime])
 
   //시간계산
   const checktime = () =>{
@@ -205,66 +151,46 @@ const getwork = async function(){
     }catch(e){
         console.log(e);
     }
-
 }
 
-    const endtime2 = async function(){
-        await Axios.post('https://qkrtmfqls.gabia.io/api/update', {
-            title: id,
-            date: moment(seconds).format('yyyy-MM-dd HH:mm:ss'),
-            worktime : worktime
-          }).then(()=>{
-            console.log("일한시간",worktime);
-            setValue(0);
-            getworktime();
-            alert('퇴근했습니다.');
-            setStatus("퇴근");
-          })
-    }
 
-    const getstaff = async ()=>{
-      Axios.post('https://qkrtmfqls.gabia.io/api/getstaff', {//데이터 불러옴
+const getuser = async (text) =>{
+  await Axios.post('https://qkrtmfqls.gabia.io/api/getdata', {//유저 전체 데이터 불러옴
+}).then((response)=>{
+  console.log(response.data);
+  setUser(response.data);
+});
+}
+
+    const staffend = async (text) =>{
+      await Axios.post('https://qkrtmfqls.gabia.io/api/setregister', {//데이터 불러옴
+      id : text
     }).then((response)=>{
-      stafflet = response.data;
-      setStaff(response.data);
-      console.log('staff값 : ',staff);
+      alert(response.data);
     });
     }
-
-    const Pushstaff = ({workstaff}) =>{
-      let workstate = workstaff.work ==0? '출근':'퇴근';
-      return(
-     <tr className="table-active">
-         <th scope="row">{workstaff.id}</th>
-         <td>{workstaff.job}</td>
-         <td>{workstaff.nickname}</td>
-         <td>{workstaff.start}</td>
-         <td>{workstate}</td>
-         <td><button onClick={staffend(workstaff.id)} type="button"  className="buttonstaff">퇴근</button></td>
-     </tr>
-      )
-    }
-
-
 
     const getregister = async ()=>{
-      Axios.post('https://qkrtmfqls.gabia.io/api/getregister', {//데이터 불러옴
+      await Axios.post('https://qkrtmfqls.gabia.io/api/getregister', {//데이터 불러옴
     }).then((response)=>{
-      setStaff(response.data);
-      console.log('staff값 : ',register);
+      console.log('회원가입 : ',response.data);
+      setRegister(response.data);
     });
     }
-    const staffend = (text) =>{
-        //console.log(text);
-    }
-
 
     const Testpuch =  () =>{
       const rows = [];
-      if(staff !=null){
-       staff.forEach(
+      // if(register !=null){
+      //   register.forEach(
+      //       (staffrow) => {
+      //         rows.push(<Pushstaff register = {staffrow} key = {staffrow.id}></Pushstaff>)
+      //  });
+      // }
+      if(userdata !=null){
+        userdata.forEach(
             (staffrow) => {
-              rows.push(<Pushstaff workstaff = {staffrow} key = {staffrow.id}></Pushstaff>)
+              //rows.push(<Pushstaff register = {staffrow} key = {staffrow.id}></Pushstaff>)
+              rows.push(<Pushuser user = {staffrow} key = {staffrow.id}></Pushuser>)
        });
       }
     return(
@@ -274,9 +200,8 @@ const getwork = async function(){
         <th scope="col">고유번호</th>
         <th scope="col">직업</th>
         <th scope="col">닉네임</th>
-        <th scope="col">시작시간</th>
-        <th scope="col">상태</th>
-        <th scope="col">강제 퇴근</th>
+        <th scope="col">승인상태</th>
+        <th scope="col">승인</th>
         </tr>
       </thead>
          <tbody>
@@ -287,34 +212,60 @@ const getwork = async function(){
 
     }
 
+    //데이터 테이블 만들기
+    const Pushstaff = (register) =>{
+      
+      let check = register.register ==0? '미승인':'승인';
+      return(
+     <tr className="table-active">
+         <th scope="row">{register.id}</th>
+         <td>{register.job}</td>
+         <td>{register.nickname}</td>
+         <td>{check}</td>
+         <td><button onClick={() => staffend(register.id)} type="button"  className="buttonstaff">승인</button></td>
+     </tr>
+      )
+    }
+
+    const Pushuser = ({user}) =>{
+      
+      let check = user.work ==0? '출근':'퇴근';
+      return(
+     <tr className="table-active">
+         <th scope="row">{user.id}</th>
+         <td>{user.job}</td>
+         <td>{user.nickname}</td>
+         <td>{check}</td>
+         <td>{parseInt(Number(user.totaltime)/60) } 시간 {parseInt(Number(user.totaltime))%60 }분</td>
+     </tr>
+      )
+    }
+
 
   return(
  <div className="d-grid gap-2">
-    <h1>스태프 페이지 입니다.</h1>
-
-    <div className="alert alert-dismissible alert-warning">
-  <button type="button" className="btn-close" data-bs-dismiss="alert"></button>
-  <div className="stafflogin">
-  <h2 className="alert-heading">알림</h2>
-  <p className="mb-0">{nickname} 님은 현재 <a href="#" className="alert-link">{status}</a> 상태입니다.</p>
-  <h2>고유번호 : {id}</h2>
-    <h2>직업 : {job}</h2>
-  </div>
-</div>
-    <h2>  
+    <h1> 페이지 입니다.</h1>
+    <h2>
     <Moment format="YYYY년 MM월 DD일 HH시 mm분 ss초" interval = { 0 }>
         {seconds}
     </Moment>
     </h2>
+    <div className="alert alert-dismissible alert-warning">
+  <button type="button" className="btn-close" data-bs-dismiss="alert"></button>
+  <div className="stafflogin">
+  <h2>고유번호 : {id}</h2>
+    <h2>직업 : {job}</h2>
+  </div>
+</div>
+
     <div className="staffbutton" >
-    <button className="staffbutton2"  onClick={starttime} type="button">출근</button>
-    <button className="staffbutton2"  onClick={endtime}  type="button">퇴근</button>
+    <button className="staffbutton2"  onClick={Pushstaff}  type="button">체크</button>
 
     </div>
     <br></br>
-    <h1>근무시간 : {parseInt(Number(totalworktime)/60) } 시간 {parseInt(Number(totalworktime))%60 } 분</h1>
-
+    <iframe title="stream-player" class="video-iframe" src="https://webiframe.betgames.tv/player/" allow="autoplay; fullscreen; encrypted-media"></iframe>
     <Testpuch/>
+
     </div>
   );
   
@@ -340,4 +291,4 @@ function UseInterval(callback, delay) {
     }, [delay]);
   }
 
-export default MenuPage;
+export default Admin;
