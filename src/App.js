@@ -1,13 +1,12 @@
 import React,{useState,useRef} from'react';
-import { HashRouter as Router, Route, Switch } from 'react-router-dom';
+import { Router as Router, Route, Switch } from 'react-router-dom';
 import SignPage from './page/Sign'; 
 import MainPage from './page/Main';
 import Menupage from './page/Menupage';
 import Staff from './page/Staff';
 import Police from './page/Police';
 import Admin from './page/Admin';
-import styled from "styled-components";
-
+import EMS from './page/EMS';
 
 
 function App({props, location, history }) { 
@@ -27,6 +26,7 @@ function App({props, location, history }) {
           <Route path='/staff' component={Staff} /> 
           <Route path='/police' component={Police} /> 
           <Route path='/Admin' component={Admin} /> 
+          <Route path='/EMS' component={EMS} /> 
           </> 
         </Switch> 
       </Router> 

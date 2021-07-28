@@ -12,9 +12,11 @@ import Police from './img/Police.png';
 import EMS from './img/EMS.png';
 import Staff from './img/Staff.jpg';
 import Logout from './img/logout.png';
+import { ProSidebar, Menu, MenuItem, SubMenu } from 'react-pro-sidebar';
+import 'react-pro-sidebar/dist/css/styles.css';
 
 
-const Menu = styled.div`
+const Menus = styled.div`
 justify-content: center;
 text-align: center;
 position: fixed;
@@ -113,7 +115,6 @@ function MenuPage({location,history }) {
 
     const staff = async function(){ //스태프페이지 이동
       if(job == '스태프' || job == '관리자'){
-        console.log(history);
         alert('스태프 페이지 이동');//성공시에만 띄움
       history.push({
           pathname: "/staff",
@@ -123,6 +124,20 @@ function MenuPage({location,history }) {
         alert('스태프만 가능합니다.');
       }
   }
+
+
+  const EMSopen = async function(){ //경찰페이지 이동
+    if(job == 'EMS' || job == '관리자'){
+      alert('EMS 페이지 이동');//성공시에만 띄움
+    history.push({
+        pathname: "/EMS",
+      })
+    }
+    else {
+      alert('EMS만 가능합니다.');
+    }
+}
+
 
   const police = async function(){ //경찰페이지 이동
     if(job == '경찰' || job == '관리자'){
@@ -171,6 +186,15 @@ const MenuButton = ({page,text})=>{
 //classname css수정시 . 사용해야함
   return(
  <div className="d-grid gap-2">
+       <ProSidebar>
+  <Menu iconShape="square">
+    <MenuItem >Dashboard</MenuItem>
+    <SubMenu title="Components" >
+      <MenuItem>Component 1</MenuItem>
+      <MenuItem>Component 2</MenuItem>
+    </SubMenu>
+  </Menu>
+</ProSidebar>
     <div id="gettt" className="alert alert-dismissible alert-warning">
       <h1 className="alert-heading">알림</h1>
         <p className="mb-0">{nickname} 님은 현재 <a href="#" className="alert-link">{status}
@@ -182,13 +206,14 @@ const MenuButton = ({page,text})=>{
       <Moment className='clock' format="YYYY년 MM월 DD일 HH시 mm분 ss초" interval = { 0 }>
         {seconds}
        </Moment>
-    <Menu>
+    <Menus>
       <MenuButton page = {staff} text = {Staff} color = 'black' name ='user'/>
-      <MenuButton text = {EMS} color = '#87BF00' name ='doctor'/>
+      <MenuButton page = {EMSopen}   text = {EMS} color = '#87BF00' name ='doctor'/>
       <MenuButton page = {police}  text = {Police} color = '#DE6800' name ='coffee'/>
       <MenuButton page = {Admin}text = {imgA} color = '#5CD3F3' name ='discord'/>
       <MenuButton page = {logout} text = {Logout} color = '#5CD3F3' name ='discord'/>
-    </Menu>
+    </Menus>
+
     </div>
   );
 }

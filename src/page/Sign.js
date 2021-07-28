@@ -16,7 +16,6 @@ function Sign({props, location, history }) {
 
   useEffect(async()=>{
     localtoken();
-
 },[]);
 
   const tokenlogin = () =>{
@@ -28,7 +27,7 @@ function Sign({props, location, history }) {
     .then((response)=>{
       console.log(response.data);
       if(response.data.id == login.id)//로그인 성공시
-      {
+      { 
       localStorage.setItem('token', response.data.accessToken);
       localStorage.setItem('id', login.id);
       console.log(window.localStorage.getItem("token"));

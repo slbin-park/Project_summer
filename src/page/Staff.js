@@ -50,7 +50,6 @@ function MenuPage({location,history }) {
      setJob(response.data.job);
      setNickname(response.data.nickname);
      //console.log('아이디 : ',id);
-     console.log("받아온 토큰값",response.data);
    })
    .catch((error)=> {
     if(error.response.data.code == 419) //error 떳을때 데이터 가져오기
@@ -118,7 +117,6 @@ function MenuPage({location,history }) {
       nickname : nickname,
       job : job
     }).then((response)=>{
-      console.log("받은값",response);
       alert('출근 성공');
     })
 }catch(e){
@@ -139,7 +137,6 @@ function MenuPage({location,history }) {
         title: id,
       }).then((response)=>{
           settotalWorktime(response.data[0].sumprice);
-          console.log(response.data[0].sumprice);
       })
 }
 
@@ -149,7 +146,6 @@ function MenuPage({location,history }) {
     try{
         getwork();
     }catch(e){
-        console.log(e);
     }
 
 };
@@ -178,7 +174,6 @@ const getwork = async function(){
   }
   //work값이 변경됬을때 실행
   useEffect(()=>{
-    console.log("바뀐뒤 work값 : ",work);
     checktime();//work값이 변경되었을때 실행함
   },[work])
 
@@ -194,13 +189,9 @@ const getwork = async function(){
     try{
   var time1 = moment(work.work,'MMMM Do YYYY, h:mm:ss a');
   var time2 = moment(seconds); 
-  console.log(time1.format('yyyy-MM-dd HH:mm:ss'));
-  console.log(time2.format('MMMM Do YYYY, h:mm:ss a'));
   var duration = moment.duration(time2.diff(time1)).asMinutes();
-  console.log(duration);
   setWorktime(duration);
   //var time3 = moment.duration(time1.diff(time2)).asMinutes();
-  console.log(time2);
     //seconds -> 현재시간
     }catch(e){
         console.log(e);
@@ -214,7 +205,6 @@ const getwork = async function(){
             date: moment(seconds).format('yyyy-MM-dd HH:mm:ss'),
             worktime : worktime
           }).then(()=>{
-            console.log("일한시간",worktime);
             setValue(0);
             getworktime();
             alert('퇴근했습니다.');
@@ -227,7 +217,6 @@ const getwork = async function(){
     }).then((response)=>{
       stafflet = response.data;
       setStaff(response.data);
-      console.log('staff값 : ',staff);
     });
     }
 
@@ -240,23 +229,12 @@ const getwork = async function(){
          <td>{workstaff.nickname}</td>
          <td>{workstaff.start}</td>
          <td>{workstate}</td>
-         <td><button onClick={staffend(workstaff.id)} type="button"  className="buttonstaff">퇴근</button></td>
      </tr>
       )
     }
 
 
 
-    const getregister = async ()=>{
-      Axios.post('https://qkrtmfqls.gabia.io/api/getregister', {//데이터 불러옴
-    }).then((response)=>{
-      setStaff(response.data);
-      console.log('staff값 : ',register);
-    });
-    }
-    const staffend = (text) =>{
-        //console.log(text);
-    }
 
 
     const Testpuch =  () =>{
@@ -276,7 +254,6 @@ const getwork = async function(){
         <th scope="col">닉네임</th>
         <th scope="col">시작시간</th>
         <th scope="col">상태</th>
-        <th scope="col">강제 퇴근</th>
         </tr>
       </thead>
          <tbody>
@@ -305,6 +282,7 @@ const getwork = async function(){
     <Moment format="YYYY년 MM월 DD일 HH시 mm분 ss초" interval = { 0 }>
         {seconds}
     </Moment>
+    <h1>근무시간 : {parseInt(Number(totalworktime)/60) } 시간 {parseInt(Number(totalworktime))%60 } 분</h1>
     </h2>
     <div className="staffbutton" >
     <button className="staffbutton2"  onClick={starttime} type="button">출근</button>
@@ -312,7 +290,7 @@ const getwork = async function(){
 
     </div>
     <br></br>
-    <h1>근무시간 : {parseInt(Number(totalworktime)/60) } 시간 {parseInt(Number(totalworktime))%60 } 분</h1>
+
 
     <Testpuch/>
     </div>

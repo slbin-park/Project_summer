@@ -7,7 +7,7 @@ import { useEffect } from 'react';
 import 'moment/locale/ko';
 import Moment from 'react-moment';
 import moment from 'moment';
-import { Button, Segment } from 'semantic-ui-react'
+
 
 function MenuPage({location,history }) { 
   
@@ -49,6 +49,7 @@ function MenuPage({location,history }) {
    .then((response)=>{
      setJob(response.data.job);
      setNickname(response.data.nickname);
+     //console.log('아이디 : ',id);
    })
    .catch((error)=> {
     if(error.response.data.code == 419) //error 떳을때 데이터 가져오기
@@ -66,6 +67,7 @@ function MenuPage({location,history }) {
         }).then((response)=>{
             if(response.data ==id) //퇴근 안했음
             {
+              //console.log("돌아온값 : ",response.data);
                 setStatus("출근");
             }
             else{
@@ -103,6 +105,7 @@ function MenuPage({location,history }) {
   }
 
   useEffect(()=>{
+    //console.log("status 값",status);
   },[status])
 
 
@@ -134,7 +137,6 @@ function MenuPage({location,history }) {
         title: id,
       }).then((response)=>{
           settotalWorktime(response.data[0].sumprice);
-          console.log(response.data[0].sumprice);
       })
 }
 
@@ -144,7 +146,6 @@ function MenuPage({location,history }) {
     try{
         getwork();
     }catch(e){
-        console.log(e);
     }
 
 };
@@ -173,7 +174,6 @@ const getwork = async function(){
   }
   //work값이 변경됬을때 실행
   useEffect(()=>{
-    console.log("바뀐뒤 work값 : ",work);
     checktime();//work값이 변경되었을때 실행함
   },[work])
 
@@ -189,13 +189,9 @@ const getwork = async function(){
     try{
   var time1 = moment(work.work,'MMMM Do YYYY, h:mm:ss a');
   var time2 = moment(seconds); 
-  console.log(time1.format('yyyy-MM-dd HH:mm:ss'));
-  console.log(time2.format('MMMM Do YYYY, h:mm:ss a'));
   var duration = moment.duration(time2.diff(time1)).asMinutes();
-  console.log(duration);
   setWorktime(duration);
   //var time3 = moment.duration(time1.diff(time2)).asMinutes();
-  console.log(time2);
     //seconds -> 현재시간
     }catch(e){
         console.log(e);
@@ -209,7 +205,6 @@ const getwork = async function(){
             date: moment(seconds).format('yyyy-MM-dd HH:mm:ss'),
             worktime : worktime
           }).then(()=>{
-            console.log("일한시간",worktime);
             setValue(0);
             getworktime();
             alert('퇴근했습니다.');
@@ -222,7 +217,6 @@ const getwork = async function(){
     }).then((response)=>{
       stafflet = response.data;
       setStaff(response.data);
-      console.log('staff값 : ',staff);
     });
     }
 
@@ -273,7 +267,7 @@ const getwork = async function(){
 
   return(
  <div className="d-grid gap-2">
-    <h1>경찰 페이지 입니다.</h1>
+    <h1>EMS 페이지 입니다.</h1>
 
     <div className="alert alert-dismissible alert-warning">
   <button type="button" className="btn-close" data-bs-dismiss="alert"></button>

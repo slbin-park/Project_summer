@@ -31,7 +31,6 @@ function Main({history}) {
       Axios.post('https://qkrtmfqls.gabia.io/api/getid',{
         id : login.id
       }).then((response)=>{
-        console.log(response.data);
         if(response.data == "중복"){
             alert('중복된 아이디 입니다.');
         } else {
@@ -85,7 +84,6 @@ function Main({history}) {
 
   const handleChange = (event) =>{
     setJob({value: event.target.value});
-    console.log(job);
   }
 
 
