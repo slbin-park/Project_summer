@@ -10,6 +10,17 @@
 
 ## 0707 내역
 
+# 데이터 
+![image](https://user-images.githubusercontent.com/74503437/135702073-a8ccf720-cdac-47f1-806d-7a5a23f09689.png)
+
+# login
+![image](https://user-images.githubusercontent.com/74503437/135702084-ab5945ab-bef5-4cda-bb9e-82a480c9a716.png)
+
+# time
+![image](https://user-images.githubusercontent.com/74503437/135702103-3e8a3868-3c6a-43f7-a9bc-b025d49d10c8.png)
+
+
+
 ### 회원가입 완료 
 ### 회원가입 중복체크 x
 ### 데이터베이스 불러오기 성공
